@@ -1,0 +1,262 @@
+\chapter{Introduction}\label{cha:introduction}
+Questo è il manuale del pilota di XCSoar, un computer di volo open-source
+originalmente sviluppato per i dispositivi Pocket PC devices.  Si presume 
+che l'utente abbia un solida conoscenza della teoria del volo veleggiato,
+e come minimo una conoscenza basilare del volo di cross-country.
+
+Gli aggiornamenti al software di XCSoar potrebbero rendere questo manuale 
+obsoleto. Si raccomanda di leggere le note di rilascio distribuite con il 
+software per tenere tracia dei cambiamenti.  Aggionamenti a manuale e software
+sono disponibili su 
+\begin{quote}
+\xcsoarwebsite{}
+\end{quote}
+
+\section{Organizazione di questo manuale}
+
+\todonum[inline]{Write about the manual crossref hinting icons and the yellow
+colour. The Quickstart will be readable also without those links available} 
+Questo manuale è scritto particolarmente per permettere all'utente di XCSoar
+un rapido utilizzo, 
+  \emph{così come} supportare una profonda comprensione di tutte le funzioni, 
+concetti e tattiche introdotte. Gli autori hanno fatto tutto il possibile per 
+farlo dalla prospettiva del pilota (e onestamente sperano di esserci riusciti).
+
+Gli autori suggeriscono vivamente di prendersi il tempo di leggere a fondo
+tutto il manuale, capitolo per capitolo (con l'eccezione dei capitoli di 
+riferimento Infobox e Configurazione). È garantito che il tempo speso si
+ripagherà sotto forma di comprensione. Durante la lettura potrà capitare di 
+sentirsi un po' persi ogni tanto, per questo motivo gli autori hanno inserito
+link ed icone.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8cm,angle=0,keepaspectratio='true']{figures/config.pdf}
+\hspace{1.5cm}
+\includegraphics[width=0.8cm,angle=0,keepaspectratio='true']{figures/reminder.pdf}
+\hspace{1.5cm}
+\includegraphics[width=0.8cm,angle=0,keepaspectratio='true']{figures/gesture.pdf}
+\hspace{1.5cm}
+\includegraphics[width=0.8cm,angle=0,keepaspectratio='true']{figures/warning.pdf}
+\caption{Icons configuration, reminder, gesture, warning}
+\end{figure}
+
+\warning Avvertimento. L'icona di avvertimento è usata ovunque le cose vadano 
+seguite esattamente. Non farlo potrebbe causare risultati inattesi, disfunzioni
+totali o addirittura pericolo per l'incolumità. Procedere solo se si è compreso
+il pericolo.
+
+\gesture{DU} Gesto. Nei dispositivi dotati di touch-screen, un gesto di scorrimento
+può essere usato per invocare il menu o una funzione piuttosto che un'altra.
+In questo esempio, DU sta per muovere il dito verso il basso e poi verso l'alto
+(in linee diritte) sullo schermo.
+  
+\gesturespec{du} Gesto Specifico. Ovunque l'auore abbia tentuto il passo con il rapido sviluppo di XCSoar, è fornita un'icona specifica che illustri i movimenti.
+
+\tip Promemoria. Questa icona rappresenta un suggerimenti, un trucco, cose che dovresti ricordare dopo aver letto la sezione corrispondente e così via.
+
+\config{orientation} Vedi configurazione ... L'icona che rappresenta du e attrezzi
+da officina rimanda ad un approfondimento degli elementi menzionati e come configurarli. I numeri accanto all'icona si riferiscono agli specifici capitoli/sezioni di riferimento di questo manuale \ref{cha:infobox} e 
+\ref{cha:configuration}, in questo caso si riferiscono ad una sezione \ref{conf:orientation}. 
+
+\marginlabel{\parbox{1.3cm}{\rotatebox[origin=c]{180}{\includegraphics[width=0.9cm]{figures/warning.pdf}}}}
+\rotatebox[origin=c]{180}{Smetti di leggere il manuale mentre stai volando all'indietro!}
+
+\emph{Leggi} a casa, \emph{configura} al suolo, in sicurezza. Se hai percepito questo avvertimento (invertito) 
+come un esempio, sei pronto a procedere.
+
+\config{usingxcsoarsafely} In riferimento alla seconda icona di esempio 
+``configurazione'' a sinistra, l'icona punta al capitolo \ref{cha:introduction}, (questo capitolo), sezione 
+\ref{sec:usingxcsoarsafely}, ``Usare XCSoar in sicurezza'' sotto, che potrebbe essere
+intesa come ``come configurare te stesso''. Sta a te decidere se tuffarti in una discussione
+approfondita e poi tornare indietro, oppure semplicemente procedere. Se stai leggendo il manuale in 
+forma elettronica, cliccare il numero ti farà saltare al riferimento incrociato richiesto.
+Usa la funzione ``indietro'' (o simili) del tuo browser per tornare sul capitolo da cui eri saltato.
+
+I numeri stampati in blu, così come le icone appena introdotte, indicano ``aiuto
+disponibile''. Lo stesso vale per gli altri URL e testi blu sottostanti.
+Cliccare su un testo come \xcsoarwebsite{/contact} aprità il tuo browser web 
+o l'applicazione di posta elettronica per metterti in contatto rispettivamente
+con altre risorse o gente più esperta.
+
+Il resto di questo capitolo ``Introduzione'' è riguardo a renderti preparato
+per XCSoar, come aumentare il tuo livello di comprensioe e coltivare  le tue capacità. 
+Il capitolo \ref{cha:quickstart} ``Quickstart'' potrebbe essere la prossima boa dopo
+\ref{cha:installation} ``Installazione'' per gli utenti frettolosi. Sentiti libero di 
+tagliar corto, ma non disdegnare di leggere tutto capitolo per capitolo, seguendo:
+
+Il capitolo~\ref{cha:interface} introduce i concetti dell'interfaccia utente
+e fa una panoramica del display.
+
+Il capitolo~\ref{cha:navigation} descrive in gran dettaglio la mappa mobile
+e come il software possa assistere nella navigazione generale.
+
+Il capitolo~\ref{cha:tasks} descrive come sono specificate e volate le task
+di cross-country, e presenta alcuni degli strumenti di analisi disponibili
+pe ri piloti per aiutarli a migliorare le proprie prestazioni.
+
+Il capitolo~\ref{cha:glide} scende in maggior dettaglio nelle funzioni del computer
+di volo, perchè è importante per i piloti essere a conoscenza di come questo 
+esegua i suoi calcoli.
+
+Il capitolo~\ref{cha:atmosph} spiega come il computer si possa
+interfacciare con variometri ed altri sensori di dati dell'aria
+e come usa questi dati per fornire vari modelli dell'atmosfera, in
+particolare su vento e convezione termica.
+
+Il capitolo~\ref{cha:airspace} descrive come XCSoar può assistere 
+nella gestione del volo in determinati airspace ed il sistema
+anticollisione FLARM.
+
+Il capitolo~\ref{cha:avionics-airframe} riguarda integrazione
+ di sistema e diagnostiche, l'integrazione di XCSoar con
+dispositivi di comunicazione e interruttori del velivolo.
+
+Il resto del manuale contiene principalmente materiale di riferimento.
+Il capitolo~\ref{cha:infobox} elenca i tipi di informazione che possono
+essere mostrati nella griglia di InfoBox accanto alla mappa.
+La configurazione del software è descritta in dettaglio nel capitolo~\ref{cha:configuration}.
+I formati dei faile dati usati dal programma, come ottenerli
+e come modificarli, è descritto nel capitolo~\ref{cha:data-files}.
+
+Infine, una breve storia e discussione del processo di sviluppo di XCSoar
+è presentata nel capitolo~\ref{cha:history-development}.
+
+\section{Note}
+
+\subsection*{Screenshot}
+In tutto il manuale ci sono diversi screenshot di XCSoar. Questi sono presi
+dal programma in funzione su una varietà di piattaforme hardware e probabilmente
+anche versioni differenti. Ogni piattaforma potrebbe avere differente risoluzione
+dello schermo, layout e caratteri, quindi ci possono essere leggere differenze 
+nell'aspetto del display. La maggior parte degli screenshot in questo manuale
+sono presi con XCSoar in configurazione orizzontale.
+
+\section{Piattaforme}
+\begin{description}
+\item[Dispositivi Android]
+XCSoar funziona su Android 1.6 o successivi.
+\item [eBookreader]
+XCSoar funziona su diversi modelli di eReader Kobo.
+\item[PC Windows]
+È possibile far funzionare XCSoar su un qualsiasi computer con sistema
+operativo Windows (Vista e successivi). 
+Questo setup può essere usato per allenarsi ad usare XCSoar.
+Nel software sono presenti una modalità simulazione ed una funzione
+di replay delle tracce IGC che possono essere usate in assenza di un
+dispositivo GPS valido.
+\item[Unix/Linux PC]
+XCSoar funziona su Unix/Linux.
+\end{description}
+
+
+
+\section{Supporto tecnico}
+
+\subsection*{Troubleshooting}
+XCSoar è prodotto da un piccolo team di sviluppatori dedicati. Sebbene siamo
+felici di aiutare con l'utilizzo del software, non possiamo insegnarti le basi 
+della moderna tecnologia informatica. Se hai una particolare domanda su XCSoar 
+non presente in questo manuale, per favore mettiti in contatto.
+Troverai tutti i seguenti link riassunti su:
+\begin{quote}
+\xcsoarwebsite{/contact}
+\end{quote}
+Per cominciare con la comunicazione, unisciti al forum di XCSoar:
+\begin{quote}
+\url{http://forum.xcsoar.org}
+\end{quote}
+Se i tuoi dubbi non sono già stati affrontati, postali o scrivici: 
+\begin{quote}
+\href{mailto:xcsoar-user@lists.sourceforge.net}{xcsoar-user@lists.sourceforge.net}
+\end{quote}
+Le domande frequenti verranno aggiunte a questo documento.
+Potresti anche trovare utile iscriverti alla mailing-list degli utenti di XCSoar,
+in modo di essere sempre aggiornato sugli ultimi sviluppi.
+
+Se niente di tutto questo è sufficiente, probabilmente hai scoperto un bug.
+
+\subsection*{Feedback}
+Come ogni programma software complesso, XCSoar può essere soggetto a
+bug, quindi se ne trovi qualcuno per favore riportalo agli sviluppatori
+usando il nostro portale di bug tracking: 
+\begin{quote}
+\xcsoarwebsite{/develop/new_ticket.html}
+\end{quote}
+o inviando una mail a:
+\begin{quote}
+\href{mailto:xcsoar-devel@lists.sourceforge.net}{xcsoar-devel@lists.sourceforge.net}
+\end{quote}
+XCSoar registra molti dati valevoli in un file di log
+\verb|xcsoar.log| nella directory \texttt{XCSoarData}. Il file di log può essere aggiunto alla segnalazione del bug per aiutare gli sviluppatori a determinare la causa del problema.
+Se ti piace l'idea di fare qualcosa di più, fatti coinvolgere:
+\begin{quote}
+\xcsoarwebsite{/develop}
+\end{quote}
+
+\subsection*{Aggiornamenti}
+È consigliato visitare periodicamente il sito di XCSoar per controllare
+se ci sono aggiornamenti del programma.
+La procedura di installazione descritta nel capitolo seguente può essere 
+ripetuta per aggiornare il software.
+Tutte le configurazioni utente e file di dati saranno preservate durante
+l'aggiornamento o la reinstallazione.
+
+È anche consigliato di controllare periodicamente se ci sono aggiornamenti
+per i file dei dati, specialmente quelli degli spazi aerei, che potrebbero
+essere soggetti a cambiamenti dalle autorità di aviazione civile nazionali.
+
+\section{Allenamento}
+Per la sicurezza propria e degli altri, ai piloti è consigliato di allenarsi
+a terra all'uso di XCSoar, in modo da familiarizzare con l'interfaccia e le
+funzioni prima di volare.
+
+\subsection*{Usare XCSoar sul PC}
+La versione per PC può essere usata per familiarizzare con l'interfaccia
+e le funzionalità di XCSoar nel comfort della propria casa. Tutti i file e
+le configurazioni usate da questa versione sono identici alle versioni embedded,
+quindi può essere utile provare le personalizzazioni al PC prima di usarle
+in volo.
+
+La versione da PC può anche esser collegata a dispositivi esterni e funzionare
+esattamente come la versione embedded. Utilizzi suggeriti sono:
+\begin{itemize}
+\item Connettere il PC ad un dispositivo FLARM per usare XCSoar come una
+stazione a terra, per visualizzare il traffico FLARM.
+\item Connettere il PC ad un variometro intelligente, come il Vega, per provare
+le impostazioni del variometro.
+\end{itemize}
+
+\subsection*{Usare XCSoar con un simulatore di volo}
+Un buon modo di imparare a dusare XCSoar è di connettere uno smartphone
+ad un PC con un simulatore di volo che possa produrre sentenze NMEA
+attraverso la porta seriale.
+Simulatori di volo adatti sono Condor e X-Plane.  
+
+I benefici di questa forma di allenamento sono che XCSoar può essere usato
+in modalità FLY, così si comporta esattamente come se si stesse realmente
+volando, e si può ottenere una buona impressione di come il programma lavori
+mentre si vola nel simulatore.
+
+\section{Usare XCSoar in sicurezza}\label{sec:usingxcsoarsafely}\label{conf:usingxcsoarsafely}
+L'uso di un sistema interattivo come XCSoar in volo comporta un certo
+rischio dovuto alla potenziale distrazione del pilota dal mantenimento
+della consapevolezza della situazione e dal tenere d'occhio i dintorni.
+
+La filosofia dietro design e sviluppo del software è di tentare di ridurre
+il più possibile queste distrazioni minimizzando la necessità di interazione
+da parte dell'utente, e presentando le informazioni in modo chiaro ed
+interpretabile con uno sguardo.
+
+I pilot che usano XCSoar devono prendersi la responsabilità di usare il
+sistema in sicurezza.
+Buone pratiche nell'uso di XCSoar includono:
+\begin{itemize}
+\item Familiarizzare col sistema attraverso intenso allenamento a terra.
+\item Effettuare manovre di allontanamento prima di interagire con XCSoar
+  in volo, per assicurarsi che non ci sia rischio di collisione con altro traffico.
+\item Impostare il sistema in modo da trarre vantaggio dalle funzioni automatiche
+  e dagli eventi in ingresso, in modo che le interazioni utente siano mimimizzatee.
+  Se ti accorgi di ripetere meccanicamente certe azioni, chiediti (o chied ad altri
+  utenti) se il software non possa gestire queste interazioni per te.
+\end{itemize}

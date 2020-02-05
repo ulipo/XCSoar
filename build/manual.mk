@@ -62,6 +62,10 @@ FIGURES_BLITZ_DE = $(wildcard $(DOC)/manual/de/Blitz/figures/*.png)
 TEX_FILES_DE = $(wildcard $(DOC)/manual/de/*.tex)
 TEX_INCLUDES_DE = $(wildcard $(DOC)/manual/de/*.sty)
 FIGURES_DE = $(wildcard $(DOC)/manual/de/figures/*.png)
+
+TEX_FILES_IT = $(wildcard $(DOC)/manual/it/*.tex)
+TEX_INCLUDES_IT = $(wildcard $(DOC)/manual/it/*.sty)
+FIGURES_IT = $(wildcard $(DOC)/manual/it/figures/*.png)
  
 TEX_FILES_FR = $(wildcard $(DOC)/manual/fr/*.tex)
 TEX_INCLUDES_FR = $(wildcard $(DOC)/manual/fr/*.sty)
@@ -90,6 +94,7 @@ MANUAL_PDF = \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-it.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash-pt_BR.pdf \
@@ -100,6 +105,9 @@ manual: $(MANUAL_PDF)
 
 Handbuch: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf
+
+manuale-it:\
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-it.pdf
 
 manuel-fr:\
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
@@ -173,6 +181,14 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf: $(DOC)/manual/fr/XCSoar-Prise-en-
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-it.pdf
+$(MANUAL_OUTPUT_DIR)/XCSoar-manual-it.pdf: $(DOC)/manual/it/XCSoar-manual-it.tex \
+	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
+	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_FR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
+	# run TeX twice to make sure that all references are resolved
+	$(TEX_RUN) $<
+	$(TEX_RUN) $<
+
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex \
 	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
@@ -218,6 +234,10 @@ $(SVG_TRANSLATE_DE): $(MANUAL_OUTPUT_DIR)/figures/%-de.pdf: $(topdir)/doc/manual
 	$(topdir)/doc/manual/figures/de.po
 	$(call svg-translate,./doc/manual/figures/de.po,$@,$<)
 
+$(SVG_TRANSLATE_IT): $(MANUAL_OUTPUT_DIR)/figures/%-it.pdf: $(topdir)/doc/manual/figures/%.svg \
+	$(topdir)/doc/manual/figures/it.po
+	$(call svg-translate,./doc/manual/figures/it.po,$@,$<)
+
 $(SVG_TRANSLATE_FR): $(MANUAL_OUTPUT_DIR)/figures/%-fr.pdf: $(topdir)/doc/manual/figures/%.svg \
 	$(topdir)/doc/manual/figures/fr.po
 	$(call svg-translate,./doc/manual/figures/fr.po,$@,$<)
@@ -258,6 +278,10 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	# Incl. the English original 
 	cp $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/en/.
 	cp $(FIGURES_EN) $(T)/en/figures/.
+	# Incl. the Italian translation
+	$(MKDIR) -p $(T)/it/figures
+	cp $(TEX_FILES_IT) $(TEX_INCLUDES_IT) $(T)/it/.
+	cp $(FIGURES_IT) $(T)/it/figures/.
 	# Incl. the French translation
 	$(MKDIR) -p $(T)/fr/figures
 	cp $(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(T)/fr/.
