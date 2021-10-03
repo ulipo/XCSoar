@@ -15,7 +15,7 @@
 static const char *
 GetWifiToggleCaption()
 {
-  return IsKoboWifiOn() ? "Wifi OFF" : "Wifi ON";
+  return IsKoboWifiOn() ? "Spegni Wifi" : "Accendi Wifi";
 }
 
 class NetworkWidget final
@@ -56,11 +56,11 @@ NetworkWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]
   toggle_wifi_button = AddButton(GetWifiToggleCaption(),
                                  [this](){ ToggleWifi(); });
 
-  wifi_button = AddButton(_("Wifi"), [](){ ShowWifiDialog(); });
+  wifi_button = AddButton(_("Reti"), [](){ ShowWifiDialog(); });
 
-  AddButton("Telnet server", [](){ KoboRunTelnetd(); });
+  AddButton("Server Telnet", [](){ KoboRunTelnetd(); });
 
-  AddButton("Ftp server", [](){ KoboRunFtpd(); });
+  AddButton("Server FTP", [](){ KoboRunFtpd(); });
 
   UpdateButtons();
 }
@@ -83,8 +83,8 @@ ShowNetworkDialog()
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<NetworkWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-           look, _("Network"));
-  dialog.AddButton(_("Close"), mrOK);
+           look, _("Rete"));
+  dialog.AddButton(_("Chiudi"), mrOK);
   dialog.SetWidget(look);
   dialog.ShowModal();
 }

@@ -119,7 +119,7 @@ SimulatorPromptWindow::OnPaint(Canvas &canvas) noexcept
   canvas.SetTextColor(COLOR_BLACK);
 #endif
   canvas.SetBackgroundTransparent();
-  canvas.DrawText(label_position, _("What do you want to do?"));
+  canvas.DrawText(label_position, _("Cosa vuoi fare?"));
 
   ContainerWindow::OnPaint(canvas);
 }

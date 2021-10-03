@@ -100,7 +100,7 @@ TrailLook::Initialise(const TrailSettings &settings)
     else
       iwidth = std::max(minwidth,
                         (i - NUMSNAILCOLORS / 2) *
-                        Layout::ScalePenWidth(16u) / NUMSNAILCOLORS);
+                        Layout::ScalePenWidth(8u) / NUMSNAILCOLORS);
 
     trail_widths[i] = iwidth;
     trail_brushes[i].Create(color);

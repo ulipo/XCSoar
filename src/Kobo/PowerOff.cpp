@@ -70,10 +70,10 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
   canvas.DrawText({x, rc.top + int(banner_height - normal_font.GetHeight()) / 2},
                   website);
 
-  char comment[30] = "powered off";   
+  char comment[30] = "spento";   
   const auto power_info = Power::GetInfo();
   if (power_info.battery.remaining_percent) {
-    snprintf ( comment+strlen(comment), 30-strlen(comment), " - battery %d%%", *power_info.battery.remaining_percent);  
+    snprintf ( comment+strlen(comment), 30-strlen(comment), " - batteria %d%%", *power_info.battery.remaining_percent);  
   }
 
   canvas.DrawText({rc.right - (int)canvas.CalcTextWidth(comment) - padding, rc.top + padding},
