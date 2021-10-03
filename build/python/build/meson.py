@@ -9,7 +9,7 @@ from .toolchain import AnyToolchain, Toolchain
 def __no_ccache(cmd: str) -> str:
     if cmd.startswith('ccache '):
         cmd = cmd[7:]
-    return cmd
+    return str.strip(cmd)
 
 def make_cross_file(toolchain: Toolchain) -> str:
     if toolchain.is_windows:

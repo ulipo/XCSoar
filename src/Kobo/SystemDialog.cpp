@@ -60,15 +60,15 @@ private:
 void
 SystemWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  AddButton("Reboot", [](){ KoboReboot(); });
-  switch_otg_mode = AddButton(IsKoboOTGHostMode() ? "Disable USB-OTG" : "Enable USB-OTG",
+  AddButton("Riavvia", [](){ KoboReboot(); });
+  switch_otg_mode = AddButton(IsKoboOTGHostMode() ? "Disabilita USB-OTG" : "Abilita USB-OTG",
             [this](){ SwitchOTGMode(); });
-  usb_storage = AddButton("Export USB storage", [this](){ ExportUSBStorage(); });
+  usb_storage = AddButton("Esporta memoria USB", [this](){ ExportUSBStorage(); });
   SetRowEnabled(USB_STORAGE, !IsKoboOTGHostMode());
 
   if(KoboCanChangeBacklightBrightness()) {
-    increase_backlight_brightness = AddButton("Increase Backlight Brightness", [this]() { IncreaseBacklightBrightness(); });
-    decrease_backlight_brightness = AddButton("Decrease Backlight Brightness", [this]() { DecreaseBacklightBrightness(); });
+    increase_backlight_brightness = AddButton("Aumenta retroilluminazione", [this]() { IncreaseBacklightBrightness(); });
+    decrease_backlight_brightness = AddButton("Diminuisci retroilluminazione", [this]() { DecreaseBacklightBrightness(); });
     int current_brightness = KoboGetBacklightBrightness();
     UpdateBacklightBrightnessButtons(current_brightness);
     if(KoboCanChangeBacklightColour()) {
@@ -138,7 +138,7 @@ SystemWidget::SwitchKernel()
       model != KoboModel::TOUCH2 &&
       model != KoboModel::GLO_HD &&
       model != KoboModel::AURA2 &&
-      ShowMessageBox(_T("This feature was designed for the Kobo Mini, Touch 2.0, Glo HD and Aura 2, but this is not one.  Use at your own risk.  Continue?"),
+      ShowMessageBox(_T("Funzione pensata per Kobo Mini, Touch 2.0, Glo HD e Aura 2, ma questo non e' uno di quelli. Procedi a tuo rischio.  Continuare?"),
                      _T("USB-OTG"), MB_YESNO) != IDYES)
     return;
 
@@ -166,7 +166,7 @@ SystemWidget::SwitchKernel()
     : otg_kernel_image;
 
   if (!KoboInstallKernel(kernel_image)) {
-      ShowMessageBox(_T("Failed to activate kernel."), _("Error"), MB_OK);
+      ShowMessageBox(_T("Impossibile attivare il kernel."), _("Errore"), MB_OK);
       return;
   }
 
@@ -178,20 +178,20 @@ inline void
 SystemWidget::ExportUSBStorage()
 {
   if (!KoboUmountData()) {
-      ShowMessageBox(_T("Failed to unmount data partition."), _("Error"),
+      ShowMessageBox(_T("Impossibile smontare la partizione dati."), _("Errore"),
                      MB_OK);
       return;
   }
 
   if (!KoboExportUSBStorage()) {
-      ShowMessageBox(_T("Failed to export data partition."), _("Error"),
+      ShowMessageBox(_T("Impossibile esportare la partizione dati."), _("Errore"),
                      MB_OK);
       KoboMountData();
       return;
   }
 
-  ShowMessageBox(_T("Your PC has now access to the data partition until you close this dialog."),
-                 _T("Export USB storage"),
+  ShowMessageBox(_T("Il tuo PC avra' accesso alla memoria del Kobo finche' questa finestra di dialogo rimarra' aperta."),
+                 _T("Esporta memoria USB"),
                  MB_OK);
 
   KoboUnexportUSBStorage();
@@ -262,8 +262,8 @@ ShowSystemDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<SystemWidget>
-    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look, "System");
-  dialog.AddButton(_("Close"), mrOK);
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look, "Sistema");
+  dialog.AddButton(_("Chiudi"), mrOK);
   dialog.SetWidget(look);
   dialog.ShowModal();
 }
