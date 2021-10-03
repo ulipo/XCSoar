@@ -16,7 +16,7 @@
 static const char *
 GetWifiToggleCaption() noexcept
 {
-  return IsKoboWifiOn() ? _("WiFi Off") : _("WiFi On");
+  return IsKoboWifiOn() ? _("Spegni WiFi") : _("Accendi WiFi");
 }
 
 class NetworkWidget final
@@ -62,7 +62,7 @@ NetworkWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]
     try {
       auto backend = CreatePlatformWifiBackend();
       if (backend == nullptr) {
-        ShowMessageBox(_("WiFi service is not available."), _("WiFi"), MB_OK);
+        ShowMessageBox(_("Servizio WiFi non disponibile."), _("WiFi"), MB_OK);
         return;
       }
 
@@ -73,9 +73,9 @@ NetworkWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]
     }
   });
 
-  AddButton("Telnet server", [](){ KoboRunTelnetd(); });
+  AddButton("Server Telnet", [](){ KoboRunTelnetd(); });
 
-  AddButton("Ftp server", [](){ KoboRunFtpd(); });
+  AddButton("Server Ftp", [](){ KoboRunFtpd(); });
 
   UpdateButtons();
 }
@@ -97,8 +97,8 @@ ShowNetworkDialog()
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<NetworkWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-           look, _("Network"));
-  dialog.AddButton(_("Close"), mrOK);
+           look, _("Rete"));
+  dialog.AddButton(_("Chiudi"), mrOK);
   dialog.SetWidget(look);
   dialog.ShowModal();
 }
