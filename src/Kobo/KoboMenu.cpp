@@ -73,12 +73,12 @@ public:
 void
 KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.AddButton(("Nickel"), dialog.MakeModalResultCallback(LAUNCH_NICKEL))
+  buttons.AddButton(("Libri"), dialog.MakeModalResultCallback(LAUNCH_NICKEL))
       ->SetEnabled(!IsKoboCustomKernel());
-  buttons.AddButton(("Tools"), [](){ ShowToolsDialog(); });
-  buttons.AddButton(_("Network"), [](){ ShowNetworkDialog(); });
-  buttons.AddButton("System", [](){ ShowSystemDialog(); });
-  buttons.AddButton(("Poweroff"), dialog.MakeModalResultCallback(POWEROFF));
+  buttons.AddButton(("Strumenti"), [](){ ShowToolsDialog(); });
+  buttons.AddButton(_("Rete"), [](){ ShowNetworkDialog(); });
+  buttons.AddButton("Sistema", [](){ ShowSystemDialog(); });
+  buttons.AddButton(("Spegni"), dialog.MakeModalResultCallback(POWEROFF));
 }
 
 void
