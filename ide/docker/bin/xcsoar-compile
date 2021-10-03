@@ -17,8 +17,8 @@ case "${TARGET}" in
       ;;
       "KOBO")
         make TARGET="${TARGET}" -j"${CPUS}" libs
-        make TARGET="${TARGET}" -j"${CPUS}"  ${ARGS[@]}
-        make TARGET="${TARGET}" -j"${CPUS}" output/KOBO/KoboRoot.tgz
+        make TARGET="${TARGET}" -j"${CPUS}" DEBUG=n ${ARGS[@]}
+        make TARGET="${TARGET}" -j"${CPUS}" DEBUG=n output/KOBO/KoboRoot.tgz
       ;;
       "UNIX")
         make TARGET="${TARGET}" -j"${CPUS}" ${ARGS[@]}

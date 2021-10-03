@@ -72,15 +72,15 @@ public:
         wpa_supplicant.Scan();
         UpdateList();
       } catch (...) {
-        ShowError(std::current_exception(), _("Error"));
+        ShowError(std::current_exception(), _("Errore"));
       }
     });
 
-    connect_button = dialog.AddButton(_("Connect"), [this](){
+    connect_button = dialog.AddButton(_("Connetti"), [this](){
       try {
         Connect();
       } catch (...) {
-        ShowError(std::current_exception(), _("Error"));
+        ShowError(std::current_exception(), _("Errore"));
       }
     });
   }
@@ -149,10 +149,10 @@ WifiListWidget::UpdateButtons()
     const auto &info = networks[cursor];
 
     if (info.id >= 0) {
-      connect_button->SetCaption(_("Remove"));
+      connect_button->SetCaption(_("Rimuovi"));
       connect_button->SetEnabled(true);
     } else if (info.signal_detected) {
-      connect_button->SetCaption(_("Connect"));
+      connect_button->SetCaption(_("Connetti"));
       connect_button->SetEnabled(true);
     }
   } else {
@@ -180,7 +180,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   /* found the currently connected wifi network? */
   if (StringIsEqual(info.bssid, status.bssid)) {
-    state = _("Connected");
+    state = _("Connesso");
 
     /* look up ip address for wlan0 or eth0 */
     const auto addr = IPv4Address::GetDeviceAddress(GetKoboWifiInterface());
@@ -194,10 +194,10 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
   else if (info.id >= 0)
     state = info.signal_detected
-      ? _("Saved and visible")
-      : _("Saved, but not visible");
+      ? _("Salvata e visibile")
+      : _("Salvata ma non visibile");
   else if (info.signal_detected)
-    state = _("Visible");
+    state = _("Visibile");
 
   if (state != nullptr)
     row_renderer.DrawRightFirstRow(canvas, rc, state);
@@ -250,7 +250,7 @@ WifiConnect(enum WifiSecurity security, WPASupplicant &wpa_supplicant, const cha
   } else if (security == OPEN_SECURITY){
     wpa_supplicant.SetNetworkID(id, "key_mgmt", "NONE");
   } else
-    throw std::runtime_error{"Unsupported Wifi security type"};
+    throw std::runtime_error{"Tipo di sicurezza Wifi non supportato"};
 
   wpa_supplicant.EnableNetwork(id);
   wpa_supplicant.SaveConfig();
@@ -270,7 +270,7 @@ WifiListWidget::Connect()
     const auto ssid = info.ssid;
 
     StaticString<256> caption;
-    caption.Format(_("Passphrase of network '%s'"), ssid.c_str());
+    caption.Format(_("Passphrase della rete '%s'"), ssid.c_str());
 
     StaticString<32> passphrase;
     passphrase.clear();
@@ -477,7 +477,7 @@ ShowWifiDialog()
   TWidgetDialog<WifiListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look, _("Wifi"));
-  dialog.AddButton(_("Close"), mrOK);
+  dialog.AddButton(_("Chiudi"), mrOK);
   dialog.SetWidget();
   dialog.GetWidget().CreateButtons(dialog);
   dialog.ShowModal();
