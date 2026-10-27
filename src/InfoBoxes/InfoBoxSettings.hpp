@@ -35,6 +35,45 @@ struct InfoBoxCustomText {
                          const char *src) noexcept;
 };
 
+/**
+ * Battery source and display options for one InfoBox slot.  Default is the
+ * legacy implementation, preserving existing profiles.
+ */
+struct InfoBoxBatterySettings {
+  enum class Source : uint8_t {
+    AUTOMATIC = 0,
+    INTERNAL = 1,
+    DEVICE_A = 2,
+    DEVICE_B,
+    DEVICE_C,
+    DEVICE_D,
+    DEVICE_E,
+    DEVICE_F,
+    DEVICE_G,
+  };
+
+  enum class Display : uint8_t {
+    AUTOMATIC = 0,
+    PERCENT,
+    VOLTAGE,
+  };
+
+  enum class Chemistry : uint8_t {
+    UNKNOWN = 0,
+    LI_ION_1S,
+  };
+
+  Source source;
+  Display display;
+  Chemistry chemistry;
+
+  void Clear() noexcept {
+    source = Source::AUTOMATIC;
+    display = Display::AUTOMATIC;
+    chemistry = Chemistry::UNKNOWN;
+  }
+};
+
 struct InfoBoxSettings {
   enum PanelIndex {
     PANEL_CIRCLING,
@@ -134,6 +173,9 @@ struct InfoBoxSettings {
      * empty for every other type.
      */
     InfoBoxCustomText text[MAX_CONTENTS];
+
+    /** Source and presentation of the battery for each InfoBox slot. */
+    InfoBoxBatterySettings battery[MAX_CONTENTS];
 
     /**
      * Geometry override for this panel. The value

@@ -46,6 +46,9 @@ InfoBoxSettings::Panel::Clear() noexcept
 
   for (auto &i : text)
     i.Clear();
+
+  for (auto &i : battery)
+    i.Clear();
 }
 
 bool

@@ -11,6 +11,7 @@
 #include "FLARM/Glue.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "Device/BatteryState.hpp"
 #include "CalculationThread.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskBehaviour.hpp"
@@ -56,6 +57,16 @@ XCSoarInterface::ReceiveGPS() noexcept
     const std::lock_guard lock{device_blackboard.mutex};
 
     ReadBlackboardBasic(device_blackboard.Basic());
+
+    std::array<DeviceBatteryState, INTERNAL_DEVICE_SLOT> batteries{};
+    for (unsigned i = 0; i < batteries.size(); ++i) {
+      const auto &source = device_blackboard.RealState(i);
+      batteries[i] = {
+        source.clock, source.alive, source.voltage_available,
+        source.battery_level_available, source.voltage, source.battery_level
+      };
+    }
+    Private::blackboard.SetDeviceBatteries(batteries);
 
     const NMEAInfo &real = device_blackboard.RealState();
     Private::movement_detected = real.alive && real.gps.real &&

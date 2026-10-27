@@ -714,8 +714,10 @@ static constexpr MetaData meta_data[] = {
     Group::SYSTEM,
     N_("Battery percent"),
     N_("Battery"),
-    N_("Percentage of device battery remaining (where applicable) and status/voltage of external power supply."),
-    UpdateInfoBoxBattery,
+    N_("Battery level or voltage; each InfoBox can select an internal "
+       "or external device and optionally estimate Li-ion 1S charge "
+       "from voltage."),
+    IBFHelper<InfoBoxContentBattery>::Create,
   },
 
   // e_Fin_GR

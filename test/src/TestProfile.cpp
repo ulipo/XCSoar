@@ -424,6 +424,53 @@ TestInfoBoxCustomText()
 }
 
 static void
+TestInfoBoxBatterySettings()
+{
+  using Source = InfoBoxBatterySettings::Source;
+  using Display = InfoBoxBatterySettings::Display;
+  using Chemistry = InfoBoxBatterySettings::Chemistry;
+  InfoBoxSettings defaults;
+  defaults.SetDefaults();
+  ok1(defaults.panels[0].battery[0].source == Source::AUTOMATIC);
+  ok1(defaults.panels[0].battery[0].display == Display::AUTOMATIC);
+  ok1(defaults.panels[0].battery[0].chemistry == Chemistry::UNKNOWN);
+
+  ProfileMap map;
+  InfoBoxSettings::Panel panel;
+  panel.Clear();
+  panel.battery[3].source = Source::DEVICE_D;
+  panel.battery[3].display = Display::VOLTAGE;
+  panel.battery[3].chemistry = Chemistry::LI_ION_1S;
+  Profile::Save(map, panel, 1);
+  unsigned value = 0;
+  ok1(map.Get("InfoBoxPanel1BatterySource3", value) &&
+      value == static_cast<unsigned>(Source::DEVICE_D));
+  ok1(map.Get("InfoBoxPanel1BatteryDisplay3", value) &&
+      value == static_cast<unsigned>(Display::VOLTAGE));
+  ok1(map.Get("InfoBoxPanel1BatteryChemistry3", value) &&
+      value == static_cast<unsigned>(Chemistry::LI_ION_1S));
+
+  InfoBoxSettings restored;
+  restored.SetDefaults();
+  Profile::Load(map, restored);
+  ok1(restored.panels[1].battery[3].source == Source::DEVICE_D);
+  ok1(restored.panels[1].battery[3].display == Display::VOLTAGE);
+  ok1(restored.panels[1].battery[3].chemistry == Chemistry::LI_ION_1S);
+  ok1(restored.panels[1].battery[4].source == Source::AUTOMATIC);
+
+  ProfileMap invalid;
+  invalid.Set("InfoBoxPanel0BatterySource0", 999u);
+  invalid.Set("InfoBoxPanel0BatteryDisplay0", 999u);
+  invalid.Set("InfoBoxPanel0BatteryChemistry0", 999u);
+  InfoBoxSettings invalid_settings;
+  invalid_settings.SetDefaults();
+  Profile::Load(invalid, invalid_settings);
+  ok1(invalid_settings.panels[0].battery[0].source == Source::AUTOMATIC);
+  ok1(invalid_settings.panels[0].battery[0].display == Display::AUTOMATIC);
+  ok1(invalid_settings.panels[0].battery[0].chemistry == Chemistry::UNKNOWN);
+}
+
+static void
 TestMacCreadyLimits()
 {
   TaskBehaviour settings{};
@@ -447,6 +494,7 @@ try {
   plan_tests(50
              + 5 + 5 + 4
              + 15
+             + 13
              + 4
 #ifdef HAVE_HTTP
              + 8
@@ -459,6 +507,7 @@ try {
   TestMigration();
   TestWeatherPageCursorRoundTrip();
   TestInfoBoxCustomText();
+  TestInfoBoxBatterySettings();
   TestMacCreadyLimits();
   TestSaveBeforeLoad();
   TestLoadThenSave();

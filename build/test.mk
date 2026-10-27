@@ -73,7 +73,7 @@ endef
 $(foreach name,$(HARNESS_PROGRAMS),$(eval $(call link-harness-program,$(name))))
 
 TEST_NAMES = \
-	TestBatteryPercent \
+	TestBatteryPercent TestBatteryState \
 	test_fixed \
 	TestWaypoints \
 	test_pressure \
@@ -202,6 +202,11 @@ TEST_BATTERY_PERCENT_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestBatteryPercent.cpp
 $(eval $(call link-program,TestBatteryPercent,TEST_BATTERY_PERCENT))
+
+TEST_BATTERY_STATE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestBatteryState.cpp
+$(eval $(call link-program,TestBatteryState,TEST_BATTERY_STATE))
 
 TEST_INFO_BOX_LAYOUT_SOURCES = \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \

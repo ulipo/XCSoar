@@ -8,9 +8,15 @@
 #include "UIState.hpp"
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/CustomTextEdit.hpp"
+#include "InfoBoxes/Panel/BatteryEdit.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
+#include "Device/Features.hpp"
+#include "NMEA/Info.hpp"
 #include "Input/InputEvents.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Math/Util.hpp"
+#include "Math/BatteryLevel.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 #include "Hardware/PowerGlobal.hpp"
 #include "system/SystemLoad.hpp"
@@ -18,6 +24,10 @@
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+
+#include <array>
+#include <cmath>
+#include <memory>
 
 #ifdef HAVE_BATTERY
 #include "Hardware/PowerInfo.hpp"
@@ -144,18 +154,54 @@ UpdateInfoBoxGLoad(InfoBoxData &data) noexcept
   data.FmtValue("{:2.2f}", CommonInterface::Basic().acceleration.g_load);
 }
 
+namespace {
+
+// This cache belongs to the UI thread. The device blackboard is read only
+// while receiving sensor updates, never from the InfoBox paint/update path.
+std::array<DeviceBatteryReading, INTERNAL_DEVICE_SLOT> external_batteries;
+
+static constexpr InfoBoxPanel battery_panels[] = {
+  { NC_("Menu", "Setup"), LoadBatteryEditPanel },
+  { nullptr, nullptr }
+};
+
+} // namespace
+
 void
-UpdateInfoBoxBattery(InfoBoxData &data) noexcept
+UpdateInfoBoxBatterySources() noexcept
 {
+  std::array<DeviceBatteryReading, INTERNAL_DEVICE_SLOT> latest{};
+  const auto &sources = CommonInterface::Private::blackboard
+    .GetDeviceBatteries();
+
+  for (unsigned i = 0; i < latest.size(); ++i)
+    latest[i] = ReadDeviceBattery(sources[i]);
+
+  if (external_batteries != latest) {
+    external_batteries = latest;
+    InfoBoxManager::SetDirty();
+  }
+}
+
+const InfoBoxPanel *
+InfoBoxContentBattery::GetDialogContent() noexcept
+{
+  return battery_panels;
+}
+
 #ifdef HAVE_BATTERY
+static void
+UpdateInternalBattery(InfoBoxData &data, bool allow_device_data) noexcept
+{
   const auto &info = Power::global_info;
   const auto &battery = info.battery;
   const auto &external = info.external;
 
-  bool DisplaySupplyVoltageAsValue=false;
+  bool display_supply_voltage = false;
   switch (external.status) {
   case Power::ExternalInfo::Status::OFF:
-    if (CommonInterface::Basic().battery_level_available)
+    if (allow_device_data &&
+        CommonInterface::Basic().battery_level_available)
       data.FmtComment("{}; {}%",
                       _("AC Off"),
                       (int)CommonInterface::Basic().battery_level);
@@ -164,10 +210,11 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
     break;
 
   case Power::ExternalInfo::Status::ON:
-    if (!CommonInterface::Basic().voltage_available)
+    if (!allow_device_data ||
+        !CommonInterface::Basic().voltage_available)
       data.SetComment(_("AC ON"));
-    else{
-      DisplaySupplyVoltageAsValue = true;
+    else {
+      display_supply_voltage = true;
       data.SetValueFromVoltage(CommonInterface::Basic().voltage);
     }
     break;
@@ -178,12 +225,12 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
   }
 
   if (battery.remaining_percent) {
-    if (!DisplaySupplyVoltageAsValue)
+    if (!display_supply_voltage)
       data.SetValueFromPercent(*battery.remaining_percent);
     else
-      data.SetCommentFromPercent(* battery.remaining_percent);
+      data.SetCommentFromPercent(*battery.remaining_percent);
   } else {
-    if (!DisplaySupplyVoltageAsValue)
+    if (!display_supply_voltage)
       data.SetValueInvalid();
     else
       data.SetCommentInvalid();
@@ -191,6 +238,94 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
 
   return;
 
+}
+
+#endif
+
+void
+InfoBoxContentBattery::Update(InfoBoxData &data) noexcept
+{
+  const auto &config = CommonInterface::GetUISettings().info_boxes;
+  const auto panel = CommonInterface::GetUIState().panel_index;
+  const auto &settings = config.panels[panel].battery[GetSlot()];
+
+  using Source = InfoBoxBatterySettings::Source;
+  using Display = InfoBoxBatterySettings::Display;
+  using Chemistry = InfoBoxBatterySettings::Chemistry;
+
+  if (settings.source == Source::AUTOMATIC) {
+    data.SetTitle(_("Battery"));
+    UpdateInfoBoxBattery(data);
+    return;
+  }
+
+  data.SetValueColor(0);
+  data.SetCommentColor(0);
+
+  if (settings.source == Source::INTERNAL) {
+#ifdef HAVE_BATTERY
+    data.SetTitle(_("Battery internal"));
+    UpdateInternalBattery(data, false);
+#else
+    // A profile from another platform may request an unavailable source.
+    data.SetTitle(_("Battery"));
+    UpdateInfoBoxBattery(data);
+#endif
+    return;
+  }
+
+  const unsigned index = static_cast<unsigned>(settings.source) -
+                         static_cast<unsigned>(Source::DEVICE_A);
+  if (index >= external_batteries.size()) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.FmtTitle("{} {}", _("Batt"), static_cast<char>('A' + index));
+  const auto &battery = external_batteries[index];
+  const bool estimate = !battery.percent_available &&
+    battery.voltage_available && settings.chemistry == Chemistry::LI_ION_1S;
+  const double estimated_percent = estimate
+    && CanEstimateLiIon1SPercent(battery.voltage)
+    ? EstimateLiIon1SPercent(battery.voltage) : -1;
+  const bool has_percent = battery.percent_available ||
+                           estimated_percent >= 0;
+  const double percent = battery.percent_available
+    ? battery.percent : estimated_percent;
+
+  if (settings.display == Display::VOLTAGE) {
+    if (battery.voltage_available)
+      data.SetValueFromVoltage(battery.voltage);
+    else
+      data.SetValueInvalid();
+
+    if (has_percent)
+      data.FmtComment("{}%{}", static_cast<unsigned>(percent + 0.5),
+                      estimate ? " ~" : "");
+    else
+      data.SetCommentInvalid();
+  } else if (has_percent) {
+    data.SetValueFromPercent(percent);
+    if (battery.voltage_available)
+      data.FmtComment("{:.2f} V{}", battery.voltage, estimate ? " ~" : "");
+    else
+      data.SetCommentInvalid();
+  } else if (settings.display == Display::AUTOMATIC &&
+             battery.voltage_available) {
+    data.SetValueFromVoltage(battery.voltage);
+    data.SetCommentInvalid();
+  } else {
+    data.SetValueInvalid();
+    data.SetComment(_("No data"));
+  }
+}
+
+void
+UpdateInfoBoxBattery(InfoBoxData &data) noexcept
+{
+#ifdef HAVE_BATTERY
+  UpdateInternalBattery(data, true);
+  return;
 #endif
 
   if (CommonInterface::Basic().voltage_available) {

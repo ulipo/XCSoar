@@ -4,10 +4,25 @@
 #pragma once
 
 #include "LiveBlackboard.hpp"
+#include "Device/BatteryState.hpp"
+
+#include <array>
 
 class InterfaceBlackboard : public LiveBlackboard
 {
+  std::array<DeviceBatteryState, INTERNAL_DEVICE_SLOT> device_batteries{};
+
 public:
+  void SetDeviceBatteries(
+    const std::array<DeviceBatteryState, INTERNAL_DEVICE_SLOT> &batteries
+  ) noexcept {
+    device_batteries = batteries;
+  }
+
+  const auto &GetDeviceBatteries() const noexcept {
+    return device_batteries;
+  }
+
   void ReadBlackboardBasic(const MoreData &nmea_info) noexcept;
   void ReadBlackboardCalculated(const DerivedInfo &derived_info) noexcept;
 

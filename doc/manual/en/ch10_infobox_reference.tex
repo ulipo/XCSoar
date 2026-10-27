@@ -394,8 +394,26 @@ reported team code.}
 %%%%%%%%%%%
 \section{Device status}
 
-\ibi{Battery voltage/percent}{Battery}{Percentage of device battery remaining
-(where applicable) and status/voltage of external power supply.}
+\ibi{Battery voltage/percent}{Battery}{Charge level or voltage from the
+selected battery source.}
+
+Each Battery InfoBox can be configured independently from its \emph{Setup}
+dialog. The source may be \emph{Default} (preserving the previous
+behaviour, including external power information), \emph{Internal battery},
+or an external port A--G. The internal battery option is shown whenever
+the platform is built with battery support, even if no reading is available.
+It uses the same battery status display as Default, but never substitutes
+a value from an external NMEA device. When an explicitly selected external
+device disconnects, its value becomes unavailable without switching to a
+different battery.
+
+\emph{Display} chooses automatic presentation, percentage, or voltage.
+The automatic display prefers a percentage received from the selected
+device and otherwise uses its voltage. A percentage can also be
+estimated from voltage by selecting \emph{Li-ion / LiPo (1 cell)}
+under \emph{Battery type}. Only enable this for a single Li-ion/LiPo
+cell. The estimate is approximate and depends on load, temperature
+and battery condition.
 \ibi{CPU load}{CPU}{CPU load consumed by XCSoar averaged over 5 seconds.}
 
 %%%%%%%%%%%

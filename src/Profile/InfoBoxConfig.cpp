@@ -77,6 +77,43 @@ SaveTextField(ProfileMap &map, char *key, std::size_t key_size,
     map.Set(key, src.c_str());
 }
 
+/**
+ * Battery settings are per panel and per slot, just like custom InfoBox text.
+ * Missing keys retain the old battery InfoBox behaviour.
+ */
+static bool
+FormatBatteryKey(char *buffer, std::size_t size, unsigned panel,
+                 unsigned slot, const char *which) noexcept
+{
+  const int n = StringFormat(buffer, size, "InfoBoxPanel%uBattery%s%u",
+                             panel, which, slot);
+  return n >= 0 && static_cast<std::size_t>(n) < size;
+}
+
+static void
+LoadBatteryField(const ProfileMap &map, unsigned panel, unsigned slot,
+                 const char *which, unsigned max_value,
+                 unsigned &value) noexcept
+{
+  char key[48];
+  if (!FormatBatteryKey(key, sizeof(key), panel, slot, which))
+    return;
+
+  unsigned loaded = value;
+  if (map.Get(key, loaded) && loaded <= max_value)
+    value = loaded;
+}
+
+static void
+SaveBatteryField(ProfileMap &map, unsigned panel, unsigned slot,
+                 const char *which, unsigned value) noexcept
+{
+  char key[48];
+  if (FormatBatteryKey(key, sizeof(key), panel, slot, which) &&
+      (value != 0 || map.Exists(key)))
+    map.Set(key, value);
+}
+
 static bool
 GetIBType(const ProfileMap &map, std::string_view key,
           InfoBoxFactory::Type &val)
@@ -213,6 +250,28 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
                     "Value", text.value);
       LoadTextField(map, profileKey, sizeof(profileKey), i, j,
                     "Comment", text.comment);
+
+      auto &battery = panel.battery[j];
+      unsigned source = static_cast<unsigned>(battery.source);
+      unsigned display = static_cast<unsigned>(battery.display);
+      unsigned chemistry = static_cast<unsigned>(battery.chemistry);
+
+      LoadBatteryField(map, i, j, "Source",
+                       static_cast<unsigned>(
+                         InfoBoxBatterySettings::Source::DEVICE_G),
+                       source);
+      LoadBatteryField(map, i, j, "Display",
+                       static_cast<unsigned>(
+                         InfoBoxBatterySettings::Display::VOLTAGE),
+                       display);
+      LoadBatteryField(map, i, j, "Chemistry",
+                       static_cast<unsigned>(
+                         InfoBoxBatterySettings::Chemistry::LI_ION_1S),
+                       chemistry);
+      battery.source = static_cast<InfoBoxBatterySettings::Source>(source);
+      battery.display = static_cast<InfoBoxBatterySettings::Display>(display);
+      battery.chemistry =
+        static_cast<InfoBoxBatterySettings::Chemistry>(chemistry);
     }
   }
 }
@@ -248,5 +307,13 @@ Profile::Save(ProfileMap &map,
                   "Value", text.value);
     SaveTextField(map, profileKey, sizeof(profileKey), index, j,
                   "Comment", text.comment);
+
+    const auto &battery = panel.battery[j];
+    SaveBatteryField(map, index, j, "Source",
+                     static_cast<unsigned>(battery.source));
+    SaveBatteryField(map, index, j, "Display",
+                     static_cast<unsigned>(battery.display));
+    SaveBatteryField(map, index, j, "Chemistry",
+                     static_cast<unsigned>(battery.chemistry));
   }
 }

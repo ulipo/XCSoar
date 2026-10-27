@@ -8,6 +8,7 @@
 #include "ApplyVegaSwitches.hpp"
 #include "ApplyExternalSettings.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/Content/Other.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Input/TaskEventObserver.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -85,6 +86,8 @@ void
 UIReceiveSensorData(OperationEnvironment &env)
 {
   XCSoarInterface::ReceiveGPS();
+
+  UpdateInfoBoxBatterySources();
 
   ApplyVegaSwitches();
 

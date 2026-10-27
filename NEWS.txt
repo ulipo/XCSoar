@@ -11,6 +11,8 @@ Version 7.47 - not yet released
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
     the Goto, and the automatic takeoff Goto is not kept #2795
+  - let each Battery InfoBox select its source and display percentage
+    or voltage, with optional Li-ion/LiPo single-cell charge estimation #3404
 * map
   - show own-ship, Cloud, SkyLines, and Thermal Information Map
     thermals as one marker. A tap shows the source, position,
@@ -43,6 +45,7 @@ Version 7.47 - not yet released
     and checklist ticks
   - describe the size limit for menu, dialogue and status text
   - describe shared thermal markers, their details, and Go To
+  - explain battery source selection and voltage estimation
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar

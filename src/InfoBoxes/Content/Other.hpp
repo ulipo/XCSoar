@@ -17,6 +17,16 @@ UpdateInfoBoxGLoad(InfoBoxData &data) noexcept;
 void
 UpdateInfoBoxBattery(InfoBoxData &data) noexcept;
 
+/** Take a UI-thread snapshot of the separately reported battery values. */
+void
+UpdateInfoBoxBatterySources() noexcept;
+
+class InfoBoxContentBattery final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
+};
+
 void
 UpdateInfoBoxExperimental1(InfoBoxData &data) noexcept;
 
